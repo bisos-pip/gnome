@@ -160,32 +160,49 @@ class examples_csu(cs.Cmnd):
         cmnd = cs.examples.cmndEnter
         literal = cs.examples.execInsert
 
-        # roCmnd_examples().pyCmnd(sectionTitle="default")
+        cs.examples.menuChapter('Discover Schema and Key Values')
 
-        cs.examples.menuChapter('=Direct Interface Commands=')
+        literal("gsettings list-recursively > /tmp/gsettings.before")
+        literal("echo then run gnome-tweaks or gnome-extensions-app")
+        literal("gsettings list-recursively > /tmp/gsettings.after")
+        literal("diff /tmp/gsettings.before /tmp/gsettings.after")
+        
+        cs.examples.menuChapter('Favorite Apps -- Get, Set, Add, Remove')
 
-        # fileName = "/tmp/facterFile.json"
+        cmnd('favoriteApps_get',  comment=" # As list of strings")
+        cmnd('favoriteApps_set', args='''"['firefox-esr.desktop', 'google-chrome.desktop', 'org.gnome.Evolution.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'yelp.desktop']"''', comment=" # As list of strings")
+        cmnd('favoriteApps_remove',  comment=" # As list of strings")
+        cmnd('favoriteApps_addAfter',  comment=" # As list of strings")
+        cmnd('favoriteApps_append',  comment=" # As list of strings")
 
-        # perfNamePars = od([('perfName', "HSS-1012"),])
-        # fromFilePars = od([('fromFile', fileName), ('cache', 'True')])
-        # fromFilePlusPerfNamePars = od(list(perfNamePars.items()) + list(fromFilePars.items()))
+        cs.examples.menuChapter('Enabled Extensions -- Get, Set, Add, Remove')
 
-        # cmnd('facterJsonOutputBytes', pars=perfNamePars, csName=cs.ro.csMuInvokerName())
-        # cmnd('facterJsonOutputBytesToFile', pars=od([('perfName', "HSS-1012"), ('fromFile', fileName)]),)
+        cmnd('extensionsEnabled_get',  comment=" # As list of strings")
+        cmnd('extensionsEnabled_set',  comment=" # As list of strings")
+        cmnd('extensionsEnabled_remove',  comment=" # As list of strings")
+        cmnd('extensionsEnabled_add',  comment=" # As list of strings")
 
-        # cmnd('factName', pars=fromFilePars, args='''networking.primary''')
+        cs.examples.menuChapter('Gnome Tweaks -- Get, Set')
 
-        # cmnd('cmdbSummary', comment=" # Summarize for cmdb")
-        # cmnd('cmdbSummary', pars=perfNamePars, comment=" # remote obtain facter data, use it to summarize for cmdb")
+        cmnd('general_overAmplification', args='get', comment=" # As list of strings")
+        cmnd('general_overAmplification', args='true', comment=" # As list of strings")
+        cmnd('general_overAmplification', args='false', comment=" # As list of strings")
 
-        # cs.examples.menuSection('/factNameGetattr/')
+        cmnd('windowsTitlebars_maximize', args='get', comment=" # As list of strings")
+        cmnd('windowsTitlebars_maximize', args='true', comment=" # As list of strings")
+        cmnd('windowsTitlebars_maximize', args='false', comment=" # As list of strings")
 
-        # cachePars= od([('cache', 'True')])
-        cmnd('favoritApps_get', args='''networking.primary''')
+        cmnd('windowsTitlebars_minimize', args='get', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minimize', args='true', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minimize', args='false', comment=" # As list of strings")
+
+        cs.examples.menuChapter('Desktop Background -- Select')
+
+        cmnd('desktopBackgroundColor',  comment=" # As list of strings")
 
         cs.examples.menuChapter('=Raw Command Examples=')
 
-        literal("facter networking")
+        literal("gnomeBisos.cs")
 
         return(cmndOutcome)
 
@@ -226,7 +243,7 @@ class favoriteApps_get(cs.Cmnd):
   gnomeCustomize.cs -i favoriteApps_get
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: ['firefox-esr.desktop', 'google-chrome.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'yelp.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Settings.desktop', 'virt-manager.desktop', 'org.keepassxc.KeePassXC.desktop', 'xsane.desktop', 'org.pipewire.Helvum.desktop', 'org.gnome.Extensions.desktop', 'emacsclient.desktop', 'org.gnome.tweaks.desktop', 'blee3-doom-sys.desktop', 'kodi.desktop', 'org.gnome.Calculator.desktop']
         #+end_org """)
 
 
@@ -268,21 +285,22 @@ class favoriteApps_set(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i favoriteApps_set "['firefox-esr.desktop', 'google-chrome.desktop', 'org.gnome.Evolution.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'yelp.desktop']"
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: ['firefox-esr.desktop', 'google-chrome.desktop', 'org.gnome.Evolution.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'yelp.desktop']
         #+end_org """)
 
-        result = []
+        favListArgs = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        favSetStr = favListArgs[0]
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        return cmndOutcome.set(opResults=favSetStr,)
 
-        return cmndOutcome.set(opResults=result,)
+        # gschema = Gio.Settings('org.gnome.shell')
 
+        # gschema.set_value('favorite-apps', GLib.Variant('as', gvalues))
+
+        # return cmndOutcome.set(opResults=gvalues,)
 
 ####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
     """ #+begin_org
@@ -298,7 +316,7 @@ class favoriteApps_set(cs.Cmnd):
 
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&1",
-            argName="favList",
+            argName="favListArgs",
             argDefault='',
             argChoices=[],
             argDescription="One argument, any string for a factName"
@@ -335,20 +353,27 @@ class favoriteApps_remove(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i favoriteApps_remove "org.gnome.Settings.desktop"
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: org.gnome.Settings.desktop found will be removed.
+: ['org.gnome.Settings.desktop']
         #+end_org """)
 
-        result = []
+        gschema = Gio.Settings('org.gnome.shell')
+        gvalues=gschema.get_value('favorite-apps').unpack()
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        favNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        for each in favNames:
+            if each in gvalues:
+                print(f"{each} found will be removed.")
+                gvalues.remove(each)
+                gschema.set_value('favorite-apps', GLib.Variant('as', gvalues))
+            else:
+               print(f"{each} not found -- Nothing  removed.")
 
-        return cmndOutcome.set(opResults=result,)
+        return cmndOutcome.set(opResults=favNames,)
+
 
 
 ####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
@@ -448,6 +473,81 @@ class favoriteApps_addAfter(cs.Cmnd):
 
         return cmndArgsSpecDict
 
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "favoriteApps_append" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<favoriteApps_append>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class favoriteApps_append(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i favoriteApps_append org.gnome.Calculator.qdesktop
+#+end_src
+#+RESULTS:
+: org.gnome.Calculator.qdesktop Already in Favs, append skipped
+: ['org.gnome.Calculator.qdesktop']
+        #+end_org """)
+
+        gschema = Gio.Settings('org.gnome.shell')
+        gvalues=gschema.get_value('favorite-apps').unpack()
+
+        favNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        for each in favNames:
+            alreadyInFavs = False
+            if each in gvalues:
+                alreadyInFavs = True
+                print(f"{each} Already in Favs, append skipped")
+
+            if  alreadyInFavs == False:
+                gvalues.append(each)
+                gschema.set_value('favorite-apps', GLib.Variant('as', gvalues))
+                print(f"{each} Appended to Favs")
+
+        return cmndOutcome.set(opResults=favNames,)
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="favNames",
+            argDefault='',
+            argChoices=[],
+            argDescription="One argument, any string for a factName"
+        )
+
+        return cmndArgsSpecDict
+
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "Enabled Extensions -- Get, Set, Add, Remove" :anchor ""  :extraInfo "CSs"
 """ #+begin_org
@@ -523,20 +623,22 @@ class extensionsEnabled_set(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i extensionsEnabled_set "[NOTYET]"
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: [NOTYET]
         #+end_org """)
 
-        result = []
+        favListArgs = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        favSetStr = favListArgs[0]
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        return cmndOutcome.set(opResults=favSetStr,)
 
-        return cmndOutcome.set(opResults=result,)
+        # gschema = Gio.Settings('org.gnome.shell')
+
+        # gschema.set_value('enabled-extensions', GLib.Variant('as', gvalues))
+
+        # return cmndOutcome.set(opResults=gvalues,)
 
 
 ####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
@@ -590,21 +692,26 @@ class extensionsEnabled_remove(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i extensionsEnabled_remove 'NOTYET'
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: NOTYET not found -- Nothing  removed.
+: ['NOTYET']
         #+end_org """)
 
-        result = []
+        gschema = Gio.Settings('org.gnome.shell')
+        gvalues=gschema.get_value('enabled-extensions').unpack()
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        favNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        for each in favNames:
+            if each in gvalues:
+                print(f"{each} found will be removed.")
+                gvalues.remove(each)
+                gschema.set_value('enabled-extensions', GLib.Variant('as', gvalues))
+            else:
+               print(f"{each} not found -- Nothing  removed.")
 
-        return cmndOutcome.set(opResults=result,)
-
+        return cmndOutcome.set(opResults=favNames,)
 
 ####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
     """ #+begin_org
@@ -628,14 +735,14 @@ class extensionsEnabled_remove(cs.Cmnd):
 
         return cmndArgsSpecDict
 
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "extensionsEnabled_add" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 2 :argsMax 9999 :pyInv "fromData"
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "extensionsEnabled_add" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<extensionsEnabled_add>>  =verify= argsMin=2 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<extensionsEnabled_add>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
 #+end_org """
 class extensionsEnabled_add(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ ]
-    cmndArgsLen = {'Min': 2, 'Max': 9999,}
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
 
     @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
@@ -657,20 +764,29 @@ class extensionsEnabled_add(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i extensionsEnabled_add NOTYET
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: NOTYET Appended to Extensions
+: ['NOTYET']
         #+end_org """)
 
-        result = []
+        gschema = Gio.Settings('org.gnome.shell')
+        gvalues=gschema.get_value('enabled-extensions').unpack()
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        extensionNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        for each in extensionNames:
+            alreadyInFavs = False
+            if each in gvalues:
+                alreadyInFavs = True
+                print(f"{each} Already in extensions, append skipped")
 
-        return cmndOutcome.set(opResults=result,)
+            if  alreadyInFavs == False:
+                gvalues.append(each)
+                # gschema.set_value('enabled-extensions', GLib.Variant('as', gvalues))
+                print(f"{each} Appended to Extensions")
+
+        return cmndOutcome.set(opResults=extensionNames,)
 
 
 ####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
@@ -686,19 +802,11 @@ class extensionsEnabled_add(cs.Cmnd):
         cmndArgsSpecDict = cs.CmndArgsSpecDict()
 
         cmndArgsSpecDict.argsDictAdd(
-            argPosition="0&1",
-            argName="after",
+            argPosition="0&9999",
+            argName="extentionNames",
             argDefault='',
             argChoices=[],
-            argDescription="One argument, any string for a factName"
-        )
-
-        cmndArgsSpecDict.argsDictAdd(
-            argPosition="1&9999",
-            argName="favNames",
-            argDefault='',
-            argChoices=[],
-            argDescription="One argument, any string for a factName"
+            argDescription=""
         )
 
         return cmndArgsSpecDict
@@ -734,23 +842,48 @@ class general_overAmplification(cs.Cmnd):
         cmndArgsSpecDict = self.cmndArgsSpec()
 ####+END:
         self.cmndDocStr(f""" #+begin_org
-** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]] diff obtained from gnome-tweaks
+< org.gnome.desktop.sound allow-volume-above-100-percent false
+---
+> org.gnome.desktop.sound allow-volume-above-100-percent true
+
         #+end_org """)
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i general_overAmplification get
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: False
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i general_overAmplification false
+#+end_src
+#+RESULTS:
+: False
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i general_overAmplification true
+#+end_src
+#+RESULTS:
+: True
+
         #+end_org """)
 
-        result = []
+        runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        cmnd = runArgs[0]
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        if cmnd == "get":
+            gschema = Gio.Settings('org.gnome.desktop.sound')
+            gvalues=gschema.get_value('allow-volume-above-100-percent').unpack()
+        elif cmnd == "true":
+            gschema = Gio.Settings('org.gnome.desktop.sound')
+            gschema.set_value('allow-volume-above-100-percent', GLib.Variant('b', True))
+        elif cmnd == "false":
+            gschema = Gio.Settings('org.gnome.desktop.sound')
+            gschema.set_value('allow-volume-above-100-percent', GLib.Variant('b', False))
+        else:
+            print(f"Bad Usage: unsupported  cmnd={cmnd}")
+
+        result=gschema.get_value('allow-volume-above-100-percent').unpack()
 
         return cmndOutcome.set(opResults=result,)
 
@@ -768,8 +901,8 @@ class general_overAmplification(cs.Cmnd):
         cmndArgsSpecDict = cs.CmndArgsSpecDict()
 
         cmndArgsSpecDict.argsDictAdd(
-            argPosition="0&9999",
-            argName="favNames",
+            argPosition="0&1",
+            argName="cmnd",
             argDefault='',
             argChoices=[],
             argDescription="One argument, any string for a factName"
@@ -807,18 +940,38 @@ class windowsTitlebars_maximize(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i windowsTitlebars_maximize get
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: appmenu:minimize,maximize,close
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_maximize off
+#+end_src
+#+RESULTS:
+: appmenu:minimize,close
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_maximize on
+#+end_src
+#+RESULTS:
+: appmenu:minimize,maximize,close
+
         #+end_org """)
 
-        result = []
+        runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        cmnd = runArgs[0]
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        gschema = Gio.Settings('org.gnome.desktop.wm.preferences')
+
+        if cmnd == "get":
+            pass
+        elif cmnd == "on":
+            gschema.set_value('button-layout', GLib.Variant('s', 'appmenu:minimize,maximize,close'))
+        elif cmnd == "off":
+            gschema.set_value('button-layout', GLib.Variant('s', 'appmenu:minimize,close'))
+        else:
+            print(f"Bad Usage: unsupported  cmnd={cmnd}")
+
+        result=gschema.get_value('button-layout').unpack()
 
         return cmndOutcome.set(opResults=result,)
 
@@ -836,14 +989,15 @@ class windowsTitlebars_maximize(cs.Cmnd):
         cmndArgsSpecDict = cs.CmndArgsSpecDict()
 
         cmndArgsSpecDict.argsDictAdd(
-            argPosition="0&9999",
-            argName="favNames",
+            argPosition="0&1",
+            argName="cmnd",
             argDefault='',
             argChoices=[],
-            argDescription="One argument, any string for a factName"
+            argDescription=""
         )
 
         return cmndArgsSpecDict
+
 
 ####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "windowsTitlebars_minimize" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
 """ #+begin_org
@@ -874,18 +1028,38 @@ class windowsTitlebars_minimize(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i windowsTitlebars_minimize get
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: appmenu:minimize,close
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_minimize off
+#+end_src
+#+RESULTS:
+: appmenu:close
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_minimize on
+#+end_src
+#+RESULTS:
+: appmenu:minimize,close
+
         #+end_org """)
 
-        result = []
+        runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        cmnd = runArgs[0]
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        gschema = Gio.Settings('org.gnome.desktop.wm.preferences')
+
+        if cmnd == "get":
+            pass
+        elif cmnd == "on":
+            gschema.set_value('button-layout', GLib.Variant('s', 'appmenu:minimize,close'))
+        elif cmnd == "off":
+            gschema.set_value('button-layout', GLib.Variant('s', 'appmenu:close'))
+        else:
+            print(f"Bad Usage: unsupported  cmnd={cmnd}")
+
+        result=gschema.get_value('button-layout').unpack()
 
         return cmndOutcome.set(opResults=result,)
 
@@ -903,11 +1077,11 @@ class windowsTitlebars_minimize(cs.Cmnd):
         cmndArgsSpecDict = cs.CmndArgsSpecDict()
 
         cmndArgsSpecDict.argsDictAdd(
-            argPosition="0&9999",
-            argName="favNames",
+            argPosition="0&1",
+            argName="cmnd",
             argDefault='',
             argChoices=[],
-            argDescription="One argument, any string for a factName"
+            argDescription=""
         )
 
         return cmndArgsSpecDict
@@ -919,11 +1093,11 @@ class windowsTitlebars_minimize(cs.Cmnd):
 #+end_org """
 ####+END:
 
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "Desktop Background Color" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "desktopBackgroundColor" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<Desktop Background Color>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<desktopBackgroundColor>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class Desktop Background Color(cs.Cmnd):
+class desktopBackgroundColor(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ ]
     cmndArgsLen = {'Min': 1, 'Max': 1,}

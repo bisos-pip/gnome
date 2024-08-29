@@ -28,7 +28,7 @@
 ####+BEGIN: b:prog:file/particulars :authors ("./inserts/authors-mb.org")
 """ #+begin_org
 * *[[elisp:(org-cycle)][| Particulars |]]* :: Authors, version
-** This File: /bisos/git/bxRepos/bisos-pip/facter/py3/bisos/facter/facter_csu.py
+** This File: /bisos/git/bxRepos/bisos-pip/gnome/py3/bisos/gnome/gnomeBisos.py
 ** Authors: Mohsen BANAN, http://mohsen.banan.1.byname.net/contact
 #+end_org """
 ####+END:
@@ -38,10 +38,10 @@
 * *[[elisp:(org-cycle)][| Particulars-csInfo |]]*
 #+end_org """
 import typing
-csInfo: typing.Dict[str, typing.Any] = { 'moduleName': ['facter_csu'], }
-csInfo['version'] = '202403270908'
+csInfo: typing.Dict[str, typing.Any] = { 'moduleName': ['gnomeBisos'], }
+csInfo['version'] = '202408274257'
 csInfo['status']  = 'inUse'
-csInfo['panel'] = 'facter_csu-Panel.org'
+csInfo['panel'] = 'gnomeBisos-Panel.org'
 csInfo['groupingType'] = 'IcmGroupingType-pkged'
 csInfo['cmndParts'] = 'IcmCmndParts[common] IcmCmndParts[param]'
 ####+END:
@@ -84,7 +84,7 @@ import collections
 
 ####+BEGIN: b:py3:cs:framework/imports :basedOn "classification"
 """ #+begin_org
-** Imports Based On Classification=cs-u
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CsFrmWrk   [[elisp:(outline-show-subtree+toggle)][||]] *Imports* =Based on Classification=cs-u=
 #+end_org """
 from bisos import b
 from bisos.b import cs
@@ -93,6 +93,8 @@ from bisos.common import csParam
 
 import collections
 ####+END:
+
+from bisos.gnome import gnomeApi
 
 from gi.repository import Gio,GLib
 
@@ -160,18 +162,346 @@ class examples_csu(cs.Cmnd):
         cmnd = cs.examples.cmndEnter
         literal = cs.examples.execInsert
 
-        # roCmnd_examples().pyCmnd(sectionTitle="default")
+        bcbArgs='''commonCaps'''
 
-        cs.examples.menuChapter('=Favorite Apps Commands=')
+        cs.examples.menuChapter('=Customize Gnome for BISOS Capability Bundles=')
+        cmnd('gnomeCustomizeForBCBs', args=bcbArgs)
 
-        cmnd('bisosFavoriteApps_list', args='''commonCaps''')
+        cs.examples.menuChapter('=BISOS Favorite Apps Commands=')
+        cmnd('bisosFavoriteApps_list', args=bcbArgs)
+        cmnd('favoriteAppsForBCBs', args=bcbArgs)
+
+        cs.examples.menuChapter('=BISOS Enabled Extensions Commands=')
+        cmnd('bisosEnabledExtensions_list', args=bcbArgs)
+        cmnd('enabledExtensionsForBCBs', args=bcbArgs)
+
+        cs.examples.menuChapter('=BISOS Gnome Tweaks Commands=')
+        cmnd('gnomeTweaksForBCBs', args=bcbArgs)
+
+        cs.examples.menuChapter('=BISOS Favorite Apps Commands=')
+        cmnd('deskBackgroundForBCBs', args=bcbArgs)
 
         cs.examples.menuChapter('=Raw Command Examples=')
 
-        literal("facter networking")
+        literal("gnomeCustomize.cs")
 
         return(cmndOutcome)
 
+####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "Customize Gnome for BISOS Capability Bundles" :anchor ""  :extraInfo "CSs"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _Customize Gnome for BISOS Capability Bundles_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+#+end_org """
+####+END:
+
+####+BEGIN: b:py3:cs:func/typing :funcName "bcb_favoriteAppsList" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /bcb_favoriteAppsList/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def bcb_favoriteAppsList(
+####+END:
+        bcb: str,
+) -> list[str]:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    commonFavoriteAppsList = [
+        'org.gnome.Terminal.desktop',
+        'org.gnome.Settings.desktop',
+        'blee3-doom-sys.desktop'
+    ]
+
+    result = commonFavoriteAppsList
+
+    if bcb == "commonBcb":
+        result = commonFavoriteAppsList
+    elif  bcb == "outerRimEnv":
+        print("processing outerRimEnv")
+    elif  bcb == "innerRimEnv":
+        print("processing innerRimEnv")
+    elif  bcb == "exposedRimEnv":
+        print("processing exposedRimEnv")
+    elif  bcb == "mediaCenter":
+        print("processing mediaCenter")
+    elif  bcb == "lcntProduction":
+        print("processing lcntProduction")
+    else:
+        print(f"unknown bcb={bcb}")
+
+    return result
+
+
+####+BEGIN: b:py3:cs:func/typing :funcName "bcb_enabledExtList" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /bcb_enabledExtList/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def bcb_enabledExtList(
+####+END:
+        bcb: str,
+) -> list[str]:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    commonEnabledExtList = [
+        'dash-to-panel@jderose9.github.com',
+        'gsconnect@andyholmes.github.io',
+        'workspace-indicator@gnome-shell-extensions.gcampax.github.com',
+    ]
+
+    result = commonEnabledExtList
+
+    if bcb == "commonBcb":
+        result = commonEnabledExtList
+    elif  bcb == "outerRimEnv":
+        print("processing outerRimEnv")
+    elif  bcb == "innerRimEnv":
+        print("processing innerRimEnv")
+    elif  bcb == "exposedRimEnv":
+        print("processing exposedRimEnv")
+    elif  bcb == "mediaCenter":
+        print("processing mediaCenter")
+    elif  bcb == "lcntProduction":
+        print("processing lcntProduction")
+    else:
+        print(f"unknown bcb={bcb}")
+
+    return result
+
+
+####+BEGIN: b:py3:cs:func/typing :funcName "bcb_gnomeTweaks" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /bcb_gnomeTweaks/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def bcb_gnomeTweaks(
+####+END:
+        bcb: str,
+) -> None:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    result = None
+
+    if bcb == "commonBcb":
+
+        results = gnomeApi.general_overAmplification().pyCmnd(
+            argsList=['get'],
+        ).results
+        print(f"general_overAmplification -- get -- results={results}")
+
+        results = gnomeApi.general_overAmplification().pyCmnd(
+            argsList=['true'],
+        ).results
+        print(f"general_overAmplification -- true -- results={results}")
+
+        results = gnomeApi.windowsTitlebars_maximize().pyCmnd(
+            argsList=['get'],
+        ).results
+        print(f"windowsTitlebars_maximize -- get -- results={results}")
+
+        results = gnomeApi.windowsTitlebars_maximize().pyCmnd(
+            argsList=['on'],
+        ).results
+        print(f"windowsTitlebars_maximize -- on -- results={results}")
+
+        results = gnomeApi.windowsTitlebars_minimize().pyCmnd(
+            argsList=['get'],
+        ).results
+        print(f"windowsTitlebars_miimize -- get -- results={results}")
+
+        results = gnomeApi.windowsTitlebars_minimize().pyCmnd(
+            argsList=['on'],
+        ).results
+        print(f"windowsTitlebars_minimize -- on -- results={results}")
+
+    elif  bcb == "outerRimEnv":
+        print("processing outerRimEnv")
+    elif  bcb == "innerRimEnv":
+        print("processing innerRimEnv")
+    elif  bcb == "exposedRimEnv":
+        print("processing exposedRimEnv")
+    elif  bcb == "mediaCenter":
+        print("processing mediaCenter")
+    elif  bcb == "lcntProduction":
+        print("processing lcntProduction")
+    else:
+        print(f"unknown bcb={bcb}")
+
+    return result
+
+####+BEGIN: b:py3:cs:func/typing :funcName "bcb_desktopBackground" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /bcb_desktopBackground/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def bcb_desktopBackground(
+####+END:
+        bcb: str,
+) -> None:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    result = None
+
+    if bcb == "commonBcb":
+        print("Desktop Background Color")
+    elif  bcb == "outerRimEnv":
+        print("processing outerRimEnv")
+    elif  bcb == "innerRimEnv":
+        print("processing innerRimEnv")
+    elif  bcb == "exposedRimEnv":
+        print("processing exposedRimEnv")
+    elif  bcb == "mediaCenter":
+        print("processing mediaCenter")
+    elif  bcb == "lcntProduction":
+        print("processing lcntProduction")
+    else:
+        print(f"unknown bcb={bcb}")
+
+    return result
+
+
+####+BEGIN: b:py3:cs:func/typing :funcName "gnomeCustomizeForBcb" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /gnomeCustomizeForBcb/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def gnomeCustomizeForBcb(
+####+END:
+        bcb: str,
+) -> None:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    if bcb == "commonBcb":
+        favApps = bcb_favoriteAppsList(bcb)
+        print(f"processing commonBcb -- favApps={favApps}")
+        enabledExt = bcb_enabledExtList(bcb)
+        print(f"processing commonBcb -- enabled={enabledExt}")
+
+        bcb_gnomeTweaks(bcb)
+        bcb_desktopBackground(bcb)
+
+    elif  bcb == "outerRimEnv":
+        print("processing outerRimEnv")
+    elif  bcb == "innerRimEnv":
+        print("processing innerRimEnv")
+    elif  bcb == "exposedRimEnv":
+        print("processing exposedRimEnv")
+    elif  bcb == "mediaCenter":
+        print("processing mediaCenter")
+    elif  bcb == "lcntProduction":
+        print("processing lcntProduction")
+    else:
+        print(f"unknown bcb={bcb}")
+
+####+BEGIN: b:py3:cs:func/typing :funcName "effectiveBcb" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /effectiveBcb/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def effectiveBcb(
+####+END:
+        bcbs: list[str],
+) -> str:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    for eachBcb in bcbs:
+        # Later we will process the list
+        pass
+    return "commonBcb"
+
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "gnomeCustomizeForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<gnomeCustomizeForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class gnomeCustomizeForBCBs(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i gnomeCustomizeForBCBs commonBcb
+#+end_src
+#+RESULTS:
+: general_overAmplification
+: windowsTitlebars_maximize
+: windowsTitlebars_minimize
+: Desktop Background Color
+: []
+        #+end_org """)
+
+        results = favoriteAppsForBCBs().pyCmnd(
+            argsList=argsList,
+        ).results
+
+        results = enabledExtensionsForBCBs().pyCmnd(
+            argsList=argsList,
+        ).results
+
+        results = gnomeTweaksForBCBs().pyCmnd(
+            argsList=argsList,
+        ).results
+
+        results = deskBackgroundForBCBs().pyCmnd(
+            argsList=argsList,
+        ).results
+
+
+        result = []
+
+        return cmndOutcome.set(opResults=result,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "BISOS Favorite Apps" :anchor ""  :extraInfo "CSs"
 """ #+begin_org
@@ -208,18 +538,18 @@ class bisosFavoriteApps_list(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeBisos.cs -i favoriteAppsForBCBs commonBcb
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: ['org.gnome.Terminal.desktop', 'org.gnome.Settings.desktop', 'blee3-doom-sys.desktop']
         #+end_org """)
 
         result = []
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        bcbs = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        bcb = effectiveBcb(bcbs)
+
+        result = bcb_favoriteAppsList(bcb)
 
         return cmndOutcome.set(opResults=result,)
 
@@ -238,20 +568,22 @@ class bisosFavoriteApps_list(cs.Cmnd):
 
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&9999",
-            argName="favNames",
+            argName="bcbs",
             argDefault='',
             argChoices=[],
-            argDescription="One argument, any string for a factName"
+            argDescription="List of BISOS Capability Bundels"
         )
 
         return cmndArgsSpecDict
 
 
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "bisosFavoriteApps_set" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "favoriteAppsForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<bisosFavoriteApps_list>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<favoriteAppsForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class bisosFavoriteApps_list(cs.Cmnd):
+class favoriteAppsForBCBs(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ ]
     cmndArgsLen = {'Min': 1, 'Max': 9999,}
@@ -276,18 +608,96 @@ class bisosFavoriteApps_list(cs.Cmnd):
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeBisos.cs -i favoriteAppsForBCBs commonBcb
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: org.gnome.Terminal.desktop Already in Favs, append skipped
+: org.gnome.Settings.desktop Already in Favs, append skipped
+: blee3-doom-sys.desktop Already in Favs, append skipped
+: ['org.gnome.Terminal.desktop', 'org.gnome.Settings.desktop', 'blee3-doom-sys.desktop']
+        #+end_org """)
+
+        favsList = bisosFavoriteApps_list().pyCmnd(
+            argsList=argsList,
+        ).results
+
+        results = gnomeApi.favoriteApps_append().pyCmnd(
+            argsList=favsList,
+        ).results
+
+        return cmndOutcome.set(opResults=results,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
+
+
+####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "BISOS Enabled Extensions" :anchor ""  :extraInfo "CSs"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _BISOS Enabled Extensions_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+#+end_org """
+####+END:
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "bisosEnabledExtensions_list" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<bisosEnabledExtensions_list>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class bisosEnabledExtensions_list(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i bisosEnabledExtensions_list commonBcb
+#+end_src
+#+RESULTS:
+: ['dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
         #+end_org """)
 
         result = []
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        bcbs = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        bcb = effectiveBcb(bcbs)
+
+        result = bcb_enabledExtList(bcb)
 
         return cmndOutcome.set(opResults=result,)
 
@@ -306,33 +716,251 @@ class bisosFavoriteApps_list(cs.Cmnd):
 
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&9999",
-            argName="favNames",
+            argName="bcbs",
             argDefault='',
             argChoices=[],
-            argDescription="One argument, any string for a factName"
+            argDescription="List of BISOS Capability Bundels"
         )
 
         return cmndArgsSpecDict
 
 
-####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "BISOS Enabled Extensions" :anchor ""  :extraInfo "CSs"
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "enabledExtensionsForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _Enabled Extensions -- Get, Set, Add, Remove_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<enabledExtensionsForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
 #+end_org """
+class enabledExtensionsForBCBs(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
 ####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i  enabledExtensionsForBCBs commonBcb
+#+end_src
+#+RESULTS:
+: Enabled Extenstions: ['dash-to-dock@micxgx.gmail.com', 'dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
+: dash-to-panel@jderose9.github.com Already in extensions, append skipped
+: gsconnect@andyholmes.github.io Already in extensions, append skipped
+: workspace-indicator@gnome-shell-extensions.gcampax.github.com Already in extensions, append skipped
+: ['dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
+        #+end_org """)
+
+        results  = gnomeApi.extensionsEnabled_get().pyCmnd(
+        ).results
+        print(f"Enabled Extenstions: {results}")
+
+        extentionsList = bisosEnabledExtensions_list().pyCmnd(
+            argsList=argsList,
+        ).results
+
+        results  = gnomeApi.extensionsEnabled_add().pyCmnd(
+            argsList=extentionsList,
+        ).results
+
+        return cmndOutcome.set(opResults=results,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
+
 
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "BISOS Gnome Tweaks" :anchor ""  :extraInfo "CSs"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _Gnome Tweaks_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _BISOS Gnome Tweaks_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
 #+end_org """
 ####+END:
 
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "gnomeTweaksForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<gnomeTweaksForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class gnomeTweaksForBCBs(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i gnomeTweaksForBCBs commonBcb
+#+end_src
+#+RESULTS:
+: general_overAmplification -- get -- results=True
+: general_overAmplification -- true -- results=True
+: windowsTitlebars_maximize -- get -- results=appmenu:minimize,maximize,close
+: windowsTitlebars_maximize -- on -- results=appmenu:minimize,maximize,close
+: windowsTitlebars_miimize -- get -- results=appmenu:minimize,maximize,close
+: windowsTitlebars_minimize -- on -- results=appmenu:minimize,close
+: []
+        #+end_org """)
+
+        result = []
+
+        bcbs = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        bcb = effectiveBcb(bcbs)
+
+        bcb_gnomeTweaks(bcb)
+
+        return cmndOutcome.set(opResults=result,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
+
+
+
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "BISOS Desktop Background" :anchor ""  :extraInfo "CSs"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _Desktop Background_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _BISOS Desktop Background_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
 #+end_org """
 ####+END:
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "deskBackgroundForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<deskBackgroundForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class deskBackgroundForBCBs(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i deskBackgroundForBCBs commonBcb
+#+end_src
+#+RESULTS:
+: Desktop Background Color
+: []
+        #+end_org """)
+
+        result = []
+
+        bcbs = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        bcb = effectiveBcb(bcbs)
+
+        bcb_desktopBackground(bcb)
+
+        # NOTYET pyCmnd gnomeApi
+
+        return cmndOutcome.set(opResults=result,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
+
+
 
 ####+BEGIN: b:py3:cs:framework/endOfFile :basedOn "classification"
 """ #+begin_org
