@@ -92,23 +92,27 @@ import collections
    "bisos.b.cs.ro"
    "blee.csPlayer.bleep"
    "bisos.gnome.gnomeBisos"
+   "bisos.b.clsMethod_csu"
+   "bisos.debian.configFile"
  ))
 #+END_SRC
 #+RESULTS:
-| bisos.b.cs.ro | blee.csPlayer.bleep | bisos.gnome.gnomeBisos |
+| bisos.b.cs.ro | blee.csPlayer.bleep | bisos.gnome.gnomeBisos | bisos.b.clsMethod_csu | bisos.debian.configFile |
 #+end_org """
 
 ####+BEGIN: b:py3:cs:framework/csuListProc :pyImports t :csuImports t :csuParams t :csmuParams nil
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CsFrmWrk   [[elisp:(outline-show-subtree+toggle)][||]] =Process CSU List= with /3/ in csuList pyImports=t csuImports=t csuParams=t
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CsFrmWrk   [[elisp:(outline-show-subtree+toggle)][||]] =Process CSU List= with /5/ in csuList pyImports=t csuImports=t csuParams=t
 #+end_org """
 
 from bisos.b.cs import ro
 from blee.csPlayer import bleep
 from bisos.gnome import gnomeBisos
+from bisos.b import clsMethod_csu
+from bisos.debian import configFile
 
 
-csuList = [ 'bisos.b.cs.ro', 'blee.csPlayer.bleep', 'bisos.gnome.gnomeBisos', ]
+csuList = [ 'bisos.b.cs.ro', 'blee.csPlayer.bleep', 'bisos.gnome.gnomeBisos', 'bisos.b.clsMethod_csu', 'bisos.debian.configFile', ]
 
 g_importedCmndsModules = cs.csuList_importedModules(csuList)
 
@@ -127,6 +131,7 @@ cs.invOutcomeReportControl(cmnd=True, ro=True)
 #+end_org """
 ####+END:
 
+gnomeBisosAutostart = gnomeBisos.ConfigFile_gnomeBisosAutostart("")
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "CmndSvcs" :anchor ""  :extraInfo "Command Services Section"
 """ #+begin_org

@@ -783,7 +783,7 @@ class extensionsEnabled_add(cs.Cmnd):
 
             if  alreadyInFavs == False:
                 gvalues.append(each)
-                # gschema.set_value('enabled-extensions', GLib.Variant('as', gvalues))
+                gschema.set_value('enabled-extensions', GLib.Variant('as', gvalues))
                 print(f"{each} Appended to Extensions")
 
         return cmndOutcome.set(opResults=extensionNames,)

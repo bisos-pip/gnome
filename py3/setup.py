@@ -41,15 +41,15 @@ def longDescription():
 ####+END:
 
 #  :curDevVer "0.92" :pypiNextVer "0.95"
-####+BEGINNOT: b:py3:pypi/nextVersion :increment "0.01"
+####+BEGIN: b:py3:pypi/nextVersion :increment "0.01"
 
-# ./pypiUploadVer exists -- pypiNextVer=0.96 -- installedVersion=nil
+# ./pypiUploadVer does not exist -- pypiNextVer=0.14 -- installedVersion=0.1
 def pkgVersion():
-        return '0.1'   # Version Nu To Be Uploaded
+        return '0.1'  # Version Nu Of Installed Pkg
 
 ####+END:
 
-####+BEGIN: b:py3:pypi/requires :extras ("pycairo" "PyGObject")
+####+BEGIN: b:py3:pypi/requires :extras ("rpyc" "pycairo" "PyGObject")
 
 requires = [
 "blee",
@@ -57,6 +57,8 @@ requires = [
 "bisos",
 "bisos.b",
 "bisos.common",
+"bisos.debian",
+"rpyc",
 "pycairo",
 "PyGObject",
 ]

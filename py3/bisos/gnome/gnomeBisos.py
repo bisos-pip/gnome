@@ -95,6 +95,7 @@ import collections
 ####+END:
 
 from bisos.gnome import gnomeApi
+from bisos.debian import configFile
 
 from gi.repository import Gio,GLib
 
@@ -109,6 +110,18 @@ import pathlib
 g_rosmu = cs.G.icmMyName()
 
 cs.invOutcomeReportControl(cmnd=True, ro=True)
+
+
+
+####+BEGIN: bx:cs:py3:section :title "Exported Instances"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  /Section/    [[elisp:(outline-show-subtree+toggle)][||]] *Exported Instances*  [[elisp:(org-cycle)][| ]]
+#+end_org """
+####+END:
+
+
+# sysdUnitSiteReg = bifSystemd.UserUnit("siteReg")
+
 
 ####+BEGIN: b:py3:cs:orgItem/section :title "Common Parameters Specification" :comment "based on cs.param.CmndParamDict -- As expected from CSU-s"
 """ #+begin_org
@@ -161,6 +174,8 @@ class examples_csu(cs.Cmnd):
         od = collections.OrderedDict
         cmnd = cs.examples.cmndEnter
         literal = cs.examples.execInsert
+
+        configFile.examples_csu(concreteConfigFile='gnomeBisosAutostart', sectionTitle="default")
 
         bcbArgs='''commonCaps'''
 
@@ -757,16 +772,17 @@ class enabledExtensionsForBCBs(cs.Cmnd):
   gnomeBisos.cs -i  enabledExtensionsForBCBs commonBcb
 #+end_src
 #+RESULTS:
-: Enabled Extenstions: ['dash-to-dock@micxgx.gmail.com', 'dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
+: Enabled Extenstions (Pre): ['dash-to-dock@micxgx.gmail.com', 'dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
 : dash-to-panel@jderose9.github.com Already in extensions, append skipped
 : gsconnect@andyholmes.github.io Already in extensions, append skipped
 : workspace-indicator@gnome-shell-extensions.gcampax.github.com Already in extensions, append skipped
-: ['dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
+: Enabled Extenstions (Post): ['dash-to-dock@micxgx.gmail.com', 'dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
+: ['dash-to-dock@micxgx.gmail.com', 'dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
         #+end_org """)
 
         results  = gnomeApi.extensionsEnabled_get().pyCmnd(
         ).results
-        print(f"Enabled Extenstions: {results}")
+        print(f"Enabled Extenstions (Pre): {results}")
 
         extentionsList = bisosEnabledExtensions_list().pyCmnd(
             argsList=argsList,
@@ -775,6 +791,10 @@ class enabledExtensionsForBCBs(cs.Cmnd):
         results  = gnomeApi.extensionsEnabled_add().pyCmnd(
             argsList=extentionsList,
         ).results
+
+        results  = gnomeApi.extensionsEnabled_get().pyCmnd(
+        ).results
+        print(f"Enabled Extenstions (Post): {results}")
 
         return cmndOutcome.set(opResults=results,)
 
@@ -960,6 +980,59 @@ class deskBackgroundForBCBs(cs.Cmnd):
 
         return cmndArgsSpecDict
 
+####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "Classes" :anchor ""  :extraInfo "InMail_Control"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _Classes_: |]]  InMail_Control  [[elisp:(org-shifttab)][<)]] E|
+#+end_org """
+####+END:
+
+####+BEGIN: b:py3:class/decl :className "ConfigFile_gnomeBisosAutostart" :superClass "configFile.ConfigFile" :comment "" :classType "basic"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /ConfigFile_gnomeBisosAutostart/  superClass=configFile.ConfigFile  [[elisp:(org-cycle)][| ]]
+#+end_org """
+class ConfigFile_gnomeBisosAutostart(configFile.ConfigFile):
+####+END:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| DocStr| ]]  InMail Service Access Instance Class for an Accessible Abstract Service.
+    #+end_org """
+
+####+BEGIN: b:py3:cs:method/typing :methodName "configFilePath" :deco "default"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /configFilePath/  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def configFilePath(
+####+END:
+            self,
+    ) -> pathlib.Path:
+        """ #+begin_org
+*** [[elisp:(org-cycle)][| DocStr| ]]  Return path
+        #+end_org """
+        serviceFilePath = pathlib.Path.joinpath(pathlib.Path.home(), ".config/autostart/gnomeBisos.desktop")
+        return serviceFilePath
+
+####+BEGIN: b:py3:cs:method/typing :methodName "configFileStr" :methodType "" :deco "default"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /configFileStr/  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def configFileStr(
+####+END
+            self,
+    ) -> str:
+        """ #+begin_org
+*** [[elisp:(org-cycle)][| DocStr| ]]  Returns string
+        #+end_org """
+        templateStr = """\
+[Desktop Entry]
+Name=gnomeBisos
+GenericName=Customize Gnome BISOS Desktop
+Comment=Depends on ~/.config/bisos
+Exec=/bisos/pipx/bin/gnomeBisos.cs  -i gnomeCustomizeForBCBs commonCaps
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true"""
+        return templateStr
 
 
 ####+BEGIN: b:py3:cs:framework/endOfFile :basedOn "classification"
@@ -967,9 +1040,7 @@ class deskBackgroundForBCBs(cs.Cmnd):
 * [[elisp:(org-cycle)][| *End-Of-Editable-Text* |]] :: emacs and org variables and control parameters
 #+end_org """
 
-#+STARTUP: showall
-
-### local variables:
+#+STARTUP: showallq### local variables:
 ### no-byte-compile: t
 ### end:
 ####+END:
