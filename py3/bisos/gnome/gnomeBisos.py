@@ -77,10 +77,7 @@ With BISOS, it is used in CMDB remotely.
 #+end_org """
 ####+END:
 
-# import os
 import collections
-# import pathlib
-# import invoke
 
 ####+BEGIN: b:py3:cs:framework/imports :basedOn "classification"
 """ #+begin_org
@@ -100,6 +97,7 @@ from bisos.debian import configFile
 from gi.repository import Gio,GLib
 
 import pathlib
+import datetime
 
 ####+BEGIN: b:py3:cs:orgItem/basic :type "=Executes=  "  :title "CSU-Lib Executions" :comment "-- cs.invOutcomeReportControl"
 """ #+begin_org
@@ -313,6 +311,59 @@ def bcb_gnomeTweaks(
         ).results
         print(f"general_overAmplification -- true -- results={results}")
 
+        results = gnomeApi.windowsTitlebars_minAndMax().pyCmnd(
+            argsList=['get'],
+        ).results
+        print(f"windowsTitlebars_minAndMax -- get -- results={results}")
+
+        results = gnomeApi.windowsTitlebars_minAndMax().pyCmnd(
+            argsList=['on'],
+        ).results
+        print(f"windowsTitlebars_minAndMax -- on -- results={results}")
+
+    elif  bcb == "outerRimEnv":
+        print("processing outerRimEnv")
+    elif  bcb == "innerRimEnv":
+        print("processing innerRimEnv")
+    elif  bcb == "exposedRimEnv":
+        print("processing exposedRimEnv")
+    elif  bcb == "mediaCenter":
+        print("processing mediaCenter")
+    elif  bcb == "lcntProduction":
+        print("processing lcntProduction")
+    else:
+        print(f"unknown bcb={bcb}")
+
+    return result
+
+
+####+BEGIN: b:py3:cs:func/typing :funcName "bcb_gnomeTweaksObsoleted" :funcType "Typed" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-Typed  [[elisp:(outline-show-subtree+toggle)][||]] /bcb_gnomeTweaksObsoleted/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def bcb_gnomeTweaksObsoleted(
+####+END:
+        bcb: str,
+) -> None:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+#+end_org """
+
+    result = None
+
+    if bcb == "commonBcb":
+
+        results = gnomeApi.general_overAmplification().pyCmnd(
+            argsList=['get'],
+        ).results
+        print(f"general_overAmplification -- get -- results={results}")
+
+        results = gnomeApi.general_overAmplification().pyCmnd(
+            argsList=['true'],
+        ).results
+        print(f"general_overAmplification -- true -- results={results}")
+
         results = gnomeApi.windowsTitlebars_maximize().pyCmnd(
             argsList=['get'],
         ).results
@@ -364,7 +415,16 @@ def bcb_desktopBackground(
     result = None
 
     if bcb == "commonBcb":
-        print("Desktop Background Color")
+        results = gnomeApi.desktopBackground().pyCmnd(
+            argsList=['get'],
+        ).results
+        print(f"desktopBackground -- get (Pre)-- results={results}")
+
+        results = gnomeApi.desktopBackground().pyCmnd(
+            argsList=['rawBisos'],
+        ).results
+        print(f"desktopBackground -- set rawBisos -- results={results}")
+
     elif  bcb == "outerRimEnv":
         print("processing outerRimEnv")
     elif  bcb == "innerRimEnv":
@@ -434,6 +494,132 @@ def effectiveBcb(
         pass
     return "commonBcb"
 
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "gnomeAutostartPrep" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 0 :argsMax 0 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<gnomeAutostartPrep>>  =verify= ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class gnomeAutostartPrep(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 0, 'Max': 0,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, None).isProblematic():
+            return failed(cmndOutcome)
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Creates ~/.config/autostart and ~/.config/bisos/gnomeBisosCustomizationCompleted
+        Repeats gnomeCustomizeForBCBs because otherwise it wont work.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i gnomeAutostartPrep
+#+end_src
+#+RESULTS:
+: /bxo/usg/bystar/.config/bisos/gnomeBisosCustomizationCompleted
+        #+end_org """)
+
+        autostartDir = pathlib.Path.joinpath(pathlib.Path.home(), ".config/autostart")
+        autostartDir.mkdir(parents=True, exist_ok=True)
+
+        bisosAppsDir = pathlib.Path.joinpath(pathlib.Path.home(), ".config/bisos")
+        bisosAppsDir.mkdir(parents=True, exist_ok=True)
+
+        controlFile = pathlib.Path.joinpath(bisosAppsDir, "gnomeBisosCustomizationCompleted")
+
+        return cmndOutcome.set(opResults=controlFile,)
+
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "gnomeAutostartForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<gnomeAutostartForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class gnomeAutostartForBCBs(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Creates ~/.config/autostart and ~/.config/bisos/gnomeBisosCustomizationCompleted
+        Repeats gnomeCustomizeForBCBs because otherwise it wont work.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i gnomeAutostartForBCBs commonBcb
+#+end_src
+#+RESULTS:
+: 08/29/2024, 22:07:18
+: Already Customized.
+: 08/29/2024, 22:07:18
+        #+end_org """)
+
+        timestamp = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+
+        print(f"{timestamp}")
+
+        controlFileStr = gnomeAutostartPrep().pyCmnd().results
+
+        controlFile = pathlib.Path(controlFileStr)
+
+        if not controlFile.is_file():
+            for i in range(5):
+                # Capture output in bisosAppsDir
+                results = gnomeCustomizeForBCBs().pyCmnd(
+                    argsList=argsList,
+                ).results
+            controlFile.touch()
+        else:
+            print(f"Already Customized.")
+
+        return cmndOutcome.set(opResults=timestamp,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
+
 
 ####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "gnomeCustomizeForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
 """ #+begin_org
@@ -489,7 +675,6 @@ class gnomeCustomizeForBCBs(cs.Cmnd):
         results = deskBackgroundForBCBs().pyCmnd(
             argsList=argsList,
         ).results
-
 
         result = []
 
@@ -863,10 +1048,8 @@ class gnomeTweaksForBCBs(cs.Cmnd):
 #+RESULTS:
 : general_overAmplification -- get -- results=True
 : general_overAmplification -- true -- results=True
-: windowsTitlebars_maximize -- get -- results=appmenu:minimize,maximize,close
-: windowsTitlebars_maximize -- on -- results=appmenu:minimize,maximize,close
-: windowsTitlebars_miimize -- get -- results=appmenu:minimize,maximize,close
-: windowsTitlebars_minimize -- on -- results=appmenu:minimize,close
+: windowsTitlebars_minAndMax -- get -- results=appmenu:minimize,maximize,close
+: windowsTitlebars_minAndMax -- on -- results=appmenu:minimize,maximize,close
 : []
         #+end_org """)
 
@@ -942,7 +1125,8 @@ class deskBackgroundForBCBs(cs.Cmnd):
   gnomeBisos.cs -i deskBackgroundForBCBs commonBcb
 #+end_src
 #+RESULTS:
-: Desktop Background Color
+: desktopBackground -- get (Pre)-- results=#77767B
+: desktopBackground -- set rawBisos -- results=#77767B
 : []
         #+end_org """)
 
@@ -952,8 +1136,6 @@ class deskBackgroundForBCBs(cs.Cmnd):
         bcb = effectiveBcb(bcbs)
 
         bcb_desktopBackground(bcb)
-
-        # NOTYET pyCmnd gnomeApi
 
         return cmndOutcome.set(opResults=result,)
 
@@ -1028,7 +1210,7 @@ class ConfigFile_gnomeBisosAutostart(configFile.ConfigFile):
 Name=gnomeBisos
 GenericName=Customize Gnome BISOS Desktop
 Comment=Depends on ~/.config/bisos
-Exec=/bisos/pipx/bin/gnomeBisos.cs  -i gnomeCustomizeForBCBs commonCaps
+Exec=bash -c '/bisos/pipx/bin/gnomeBisos.cs  -i gnomeAutostartForBCBs commonCaps &>> $HOME/.config/bisos/gnomeAutostartForBCBs.log'
 Terminal=false
 Type=Application
 X-GNOME-Autostart-enabled=true"""

@@ -188,17 +188,23 @@ class examples_csu(cs.Cmnd):
         cmnd('general_overAmplification', args='true', comment=" # As list of strings")
         cmnd('general_overAmplification', args='false', comment=" # As list of strings")
 
-        cmnd('windowsTitlebars_maximize', args='get', comment=" # As list of strings")
-        cmnd('windowsTitlebars_maximize', args='true', comment=" # As list of strings")
-        cmnd('windowsTitlebars_maximize', args='false', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minAndMax', args='get', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minAndMax', args='true', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minAndMax', args='false', comment=" # As list of strings")
 
-        cmnd('windowsTitlebars_minimize', args='get', comment=" # As list of strings")
-        cmnd('windowsTitlebars_minimize', args='true', comment=" # As list of strings")
-        cmnd('windowsTitlebars_minimize', args='false', comment=" # As list of strings")
+        cmnd('windowsTitlebars_maximize', args='get', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_maximize', args='true', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_maximize', args='false', comment=" # OBSOLETED")
+
+        cmnd('windowsTitlebars_minimize', args='get', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_minimize', args='true', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_minimize', args='false', comment=" # OBSOLETED")
 
         cs.examples.menuChapter('Desktop Background -- Select')
 
-        cmnd('desktopBackgroundColor',  comment=" # As list of strings")
+        cmnd('desktopBackground', args='get', comment=" # As list of strings")
+        cmnd('desktopBackground', args='freshDebian', comment=" # As list of strings")
+        cmnd('desktopBackground', args='rawBisos', comment=" # As list of strings")
 
         cs.examples.menuChapter('=Raw Command Examples=')
 
@@ -911,6 +917,97 @@ class general_overAmplification(cs.Cmnd):
         return cmndArgsSpecDict
 
 
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "windowsTitlebars_minAndMax" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<windowsTitlebars_minAndMax>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class windowsTitlebars_minAndMax(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 1,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_minAndMax get
+#+end_src
+#+RESULTS:
+: appmenu:minimize,maximize,close
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_minAndMax off
+#+end_src
+#+RESULTS:
+: appmenu:close
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i windowsTitlebars_minAndMax on
+#+end_src
+#+RESULTS:
+: appmenu:minimize,maximize,close
+
+        #+end_org """)
+
+        runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        cmnd = runArgs[0]
+
+        gschema = Gio.Settings('org.gnome.desktop.wm.preferences')
+
+        if cmnd == "get":
+            pass
+        elif cmnd == "on":
+            gschema.set_value('button-layout', GLib.Variant('s', 'appmenu:minimize,maximize,close'))
+        elif cmnd == "off":
+            gschema.set_value('button-layout', GLib.Variant('s', 'appmenu:close'))
+        else:
+            print(f"Bad Usage: unsupported  cmnd={cmnd}")
+
+        result=gschema.get_value('button-layout').unpack()
+
+        return cmndOutcome.set(opResults=result,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&1",
+            argName="cmnd",
+            argDefault='',
+            argChoices=[],
+            argDescription=""
+        )
+
+        return cmndArgsSpecDict
+
+
+
+
 ####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "windowsTitlebars_maximize" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<windowsTitlebars_maximize>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
@@ -1093,11 +1190,11 @@ class windowsTitlebars_minimize(cs.Cmnd):
 #+end_org """
 ####+END:
 
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "desktopBackgroundColor" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "desktopBackground" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<desktopBackgroundColor>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<desktopBackground>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class desktopBackgroundColor(cs.Cmnd):
+class desktopBackground(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ ]
     cmndArgsLen = {'Min': 1, 'Max': 1,}
@@ -1127,22 +1224,82 @@ gsettings set org.gnome.desktop.background primary-color 'blue'
 gsettings set org.gnome.desktop.background primary-color '#ddd'
 gsettings set org.gnome.desktop.background primary-color 'rgb(255, 255, 255)'
 
+> org.gnome.Settings last-panel 'background'
+651,654c651,654
+< org.gnome.desktop.background picture-uri 'file:///usr/share/images/desktop-base/desktop-background.xml'
+< org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/gnome/adwaita-d.webp'
+< org.gnome.desktop.background primary-color '#023c88'
+< org.gnome.desktop.background secondary-color '#5789ca'
+---
+
+
+> org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/gnome/vnc-l.webp'
+> org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/gnome/vnc-d.webp'
+> org.gnome.desktop.background primary-color '#77767B'
+> org.gnome.desktop.background secondary-color '#000000'
+809,811c809,811
+< org.gnome.desktop.screensaver picture-uri 'file:///usr/share/images/desktop-base/desktop-lockscreen.xml'
+< org.gnome.desktop.screensaver primary-color '#023c88'
+< org.gnome.desktop.screensaver secondary-color '#5789ca'
+---
+> org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/gnome/vnc-l.webp'
+> org.gnome.desktop.screensaver primary-color '#77767B'
+> org.gnome.desktop.screensaver secondary-color '#000000'
+
+
         #+end_org """)
 
         self.captureRunStr(""" #+begin_org
 #+begin_src sh :results output :session shared
-  gnomeCustomize.cs -i favoriteApps_set "[]"
+  gnomeCustomize.cs -i desktopBackground get
 #+end_src
 #+RESULTS:
-: [{'networking.primary': 'eno1'}, {'os.distro.id': 'Debian'}]
+: #77767B
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i desktopBackground freshDebian
+#+end_src
+#+RESULTS:
+: #023c88
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i desktopBackground rawBisos
+#+end_src
+#+RESULTS:
+: #77767B
         #+end_org """)
 
-        result = []
+        runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        background = runArgs[0]
 
-        factNames = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
-        for eachFactName in factNames:
-            factValue = facter._getWithGetattr(eachFactName, cache=cache, fromFile=fromFile, fromData=fromData)
-            result.append({eachFactName: factValue})
+        gschema = Gio.Settings('org.gnome.desktop.background')
+
+        if background == "get":
+            pass
+        
+        elif background == "freshDebian":
+            gschema.set_value('picture-uri', GLib.Variant('s', 'file:///usr/share/images/desktop-base/desktop-background.xml'))
+            gschema.set_value('picture-uri-dark', GLib.Variant('s', 'file:///usr/share/backgrounds/gnome/adwaita-d.webp'))
+            gschema.set_value('primary-color', GLib.Variant('s', '#023c88'))
+            gschema.set_value('secondary-color', GLib.Variant('s', '#5789ca'))
+            gschema = Gio.Settings('org.gnome.desktop.screensaver')
+            gschema.set_value('picture-uri', GLib.Variant('s', 'file:///usr/share/images/desktop-base/desktop-background.xml'))
+            gschema.set_value('primary-color', GLib.Variant('s', '#023c88'))
+            gschema.set_value('secondary-color', GLib.Variant('s', '#5789ca'))
+
+        elif background == "rawBisos":
+            gschema.set_value('picture-uri', GLib.Variant('s', 'file:///usr/share/backgrounds/gnome/vnc-l.webp'))
+            gschema.set_value('picture-uri-dark', GLib.Variant('s', 'file:///usr/share/backgrounds/gnome/vnc-d.webp'))
+            gschema.set_value('primary-color', GLib.Variant('s', '#77767B'))
+            gschema.set_value('secondary-color', GLib.Variant('s', '#023c88'))
+            gschema = Gio.Settings('org.gnome.desktop.screensaver')
+            gschema.set_value('picture-uri', GLib.Variant('s', 'file:///usr/share/backgrounds/gnome/vnc-l.webp'))
+            gschema.set_value('primary-color', GLib.Variant('s', '#77767B'))
+            gschema.set_value('secondary-color', GLib.Variant('s', '#023c88'))
+
+        else:
+            print(f"Bad Usage: unsupported  background={background}")
+
+
+        result=gschema.get_value('primary-color').unpack()
 
         return cmndOutcome.set(opResults=result,)
 
@@ -1160,8 +1317,8 @@ gsettings set org.gnome.desktop.background primary-color 'rgb(255, 255, 255)'
         cmndArgsSpecDict = cs.CmndArgsSpecDict()
 
         cmndArgsSpecDict.argsDictAdd(
-            argPosition="0&9999",
-            argName="favNames",
+            argPosition="0&1",
+            argName="backgroundColor",
             argDefault='',
             argChoices=[],
             argDescription="One argument, any string for a factName"
