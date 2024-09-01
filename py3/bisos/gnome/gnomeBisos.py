@@ -672,6 +672,11 @@ class gnomeCustomizeForBCBs(cs.Cmnd):
             argsList=argsList,
         ).results
 
+        results = dashToPanelCustomizeForBCBs().pyCmnd(
+            argsList=argsList,
+        ).results
+
+
         results = deskBackgroundForBCBs().pyCmnd(
             argsList=argsList,
         ).results
@@ -1086,6 +1091,101 @@ class gnomeTweaksForBCBs(cs.Cmnd):
         return cmndArgsSpecDict
 
 
+####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "dashToPanelCustomize" :anchor ""  :extraInfo "CSs"
+* [[elisp:(show-all)][(>]]  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_  _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_     [[elisp:(outline-show-subtree+toggle)][| _dashToPanelCustomize_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+####+END:
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "dashToPanelCustomizeForBCBs" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 9999 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<dashToPanelCustomizeForBCBs>>  =verify= argsMin=1 argsMax=9999 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class dashToPanelCustomizeForBCBs(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 9999,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns factValue for specified factName. Uses the safe getattr to do so. See factName cmnd.
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeBisos.cs -i dashToPanelCustomizeForBCBs commonBcb
+#+end_src
+#+RESULTS:
+: dashToPanelCustomize -- get -- results=True
+: dashToPanelCustomize -- rawBisos -- results=True
+: []
+        #+end_org """)
+
+        result = []
+
+        bcbs = self.cmndArgsGet("0&9999", cmndArgsSpecDict, argsList)
+        bcb = effectiveBcb(bcbs)
+
+        if bcb == "commonBcb":
+
+            results = gnomeApi.dashToPanelCustomize().pyCmnd(
+                argsList=['get'],
+            ).results
+            print(f"dashToPanelCustomize -- get -- results={results}")
+
+            results = gnomeApi.dashToPanelCustomize().pyCmnd(
+                argsList=['rawBisos'],
+            ).results
+            print(f"dashToPanelCustomize -- rawBisos -- results={results}")
+
+        elif  bcb == "outerRimEnv":
+            print("processing outerRimEnv")
+        elif  bcb == "innerRimEnv":
+            print("processing innerRimEnv")
+        elif  bcb == "exposedRimEnv":
+            print("processing exposedRimEnv")
+        elif  bcb == "mediaCenter":
+            print("processing mediaCenter")
+        elif  bcb == "lcntProduction":
+            print("processing lcntProduction")
+        else:
+            print(f"unknown bcb={bcb}")
+
+        return cmndOutcome.set(opResults=result,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&9999",
+            argName="bcbs",
+            argDefault='',
+            argChoices=[],
+            argDescription="List of BISOS Capability Bundels"
+        )
+
+        return cmndArgsSpecDict
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "BISOS Desktop Background" :anchor ""  :extraInfo "CSs"
 """ #+begin_org

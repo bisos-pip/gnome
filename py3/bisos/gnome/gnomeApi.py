@@ -189,16 +189,21 @@ class examples_csu(cs.Cmnd):
         cmnd('general_overAmplification', args='false', comment=" # As list of strings")
 
         cmnd('windowsTitlebars_minAndMax', args='get', comment=" # As list of strings")
-        cmnd('windowsTitlebars_minAndMax', args='true', comment=" # As list of strings")
-        cmnd('windowsTitlebars_minAndMax', args='false', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minAndMax', args='on', comment=" # As list of strings")
+        cmnd('windowsTitlebars_minAndMax', args='off', comment=" # As list of strings")
 
         cmnd('windowsTitlebars_maximize', args='get', comment=" # OBSOLETED")
-        cmnd('windowsTitlebars_maximize', args='true', comment=" # OBSOLETED")
-        cmnd('windowsTitlebars_maximize', args='false', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_maximize', args='on', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_maximize', args='off', comment=" # OBSOLETED")
 
         cmnd('windowsTitlebars_minimize', args='get', comment=" # OBSOLETED")
-        cmnd('windowsTitlebars_minimize', args='true', comment=" # OBSOLETED")
-        cmnd('windowsTitlebars_minimize', args='false', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_minimize', args='on', comment=" # OBSOLETED")
+        cmnd('windowsTitlebars_minimize', args='off', comment=" # OBSOLETED")
+
+        cs.examples.menuChapter('Dash-to-Panel Customization -- Select')
+
+        cmnd('dashToPanelCustomize', args='get', comment=" # As list of strings")
+        cmnd('dashToPanelCustomize', args='rawBisos', comment=" # As list of strings")
 
         cs.examples.menuChapter('Desktop Background -- Select')
 
@@ -809,7 +814,7 @@ class extensionsEnabled_add(cs.Cmnd):
 
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&9999",
-            argName="extentionNames",
+            argName="extensionNames",
             argDefault='',
             argChoices=[],
             argDescription=""
@@ -877,14 +882,13 @@ class general_overAmplification(cs.Cmnd):
         runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
         cmnd = runArgs[0]
 
+        gschema = Gio.Settings('org.gnome.desktop.sound')
+
         if cmnd == "get":
-            gschema = Gio.Settings('org.gnome.desktop.sound')
-            gvalues=gschema.get_value('allow-volume-above-100-percent').unpack()
+            pass
         elif cmnd == "true":
-            gschema = Gio.Settings('org.gnome.desktop.sound')
             gschema.set_value('allow-volume-above-100-percent', GLib.Variant('b', True))
         elif cmnd == "false":
-            gschema = Gio.Settings('org.gnome.desktop.sound')
             gschema.set_value('allow-volume-above-100-percent', GLib.Variant('b', False))
         else:
             print(f"Bad Usage: unsupported  cmnd={cmnd}")
@@ -1182,6 +1186,132 @@ class windowsTitlebars_minimize(cs.Cmnd):
         )
 
         return cmndArgsSpecDict
+
+
+####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "Customize Dash-to-Panel Extension" :anchor ""  :extraInfo "CSs"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*     [[elisp:(outline-show-subtree+toggle)][| _Customize Dash-to-Panel Extension_: |]]  CSs  [[elisp:(org-shifttab)][<)]] E|
+#+end_org """
+####+END:
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "dashToPanelCustomize" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "fromData"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<dashToPanelCustomize>>  =verify= argsMin=1 argsMax=1 ro=cli pyInv=fromData   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class dashToPanelCustomize(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 1,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+             fromData: typing.Any=None,   # pyInv Argument
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        self.cmndDocStr(""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]] Customize the dash-to-panel extension based on specification.
+When spec=rawBisos --PanelInteliHide=enabled, panleLength=100%, The panel hides for maximized windows.
+
+1917c1917
+< org.gnome.shell.extensions.dash-to-panel animate-appicon-hover-animation-extent {'RIPPLE': 4, 'PLANK': 4}
+---
+> org.gnome.shell.extensions.dash-to-panel animate-appicon-hover-animation-extent {'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
+2023c2023
+< org.gnome.shell.extensions.dash-to-panel intellihide false
+---
+> org.gnome.shell.extensions.dash-to-panel intellihide true
+2025c2025
+< org.gnome.shell.extensions.dash-to-panel intellihide-behaviour 'FOCUSED_WINDOWS'
+---
+> org.gnome.shell.extensions.dash-to-panel intellihide-behaviourintellihide-behaviour 'MAXIMIZED_WINDOWS'
+2028c2028
+< org.gnome.shell.extensions.dash-to-panel intellihide-hide-from-windows false
+---
+> org.gnome.shell.extensions.dash-to-panel intellihide-hide-from-windows true
+2046c2046
+< org.gnome.shell.extensions.dash-to-panel panel-anchors '{}'
+---
+> org.gnome.shell.extensions.dash-to-panel panel-anchors '{"0":"MIDDLE"}'
+2051c2051
+< org.gnome.shell.extensions.dash-to-panel panel-lengths '{}'animate-appicon-hover-animation-extent
+---
+> org.gnome.shell.extensions.dash-to-panel panel-lengths '{"0":100}'
+2055c2055
+< org.gnome.shell.extensions.dash-to-panel panel-sizes '{}'
+---
+> org.gnome.shell.extensions.dash-to-panel panel-sizes '{"0":48}'
+
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i dashToPanelCustomize get
+#+end_src
+#+RESULTS:
+: #77767B
+#+begin_src sh :results output :session shared
+  gnomeCustomize.cs -i dashToPanelCustomize rawBisos
+#+end_src
+#+RESULTS:
+: #77767B
+        #+end_org """)
+
+        runArgs  = self.cmndArgsGet("0&1", cmndArgsSpecDict, argsList)
+        spec = runArgs[0]
+
+        gschema = Gio.Settings('org.gnome.shell.extensions.dash-to-panel')
+
+        if spec == "get":
+            pass
+
+        elif spec == "rawBisos":
+            gschema.set_value('animate-appicon-hover-animation-extent', GLib.Variant('a{si}', {'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}))
+            gschema.set_value('intellihide', GLib.Variant('b', True))
+            gschema.set_value('intellihide-behaviour', GLib.Variant('s', 'MAXIMIZED_WINDOWS'))
+            gschema.set_value('intellihide-hide-from-windows', GLib.Variant('b', True))
+            gschema.set_value('panel-anchors', GLib.Variant('s', '{"0":"MIDDLE"}'))
+            gschema.set_value('panel-lengths', GLib.Variant('s', '{"0":100}'))
+            gschema.set_value('panel-sizes', GLib.Variant('s', '{"0":48}'))
+
+        else:
+            print(f"Bad Usage: unsupported  background={background}")
+
+        result=gschema.get_value('intellihide').unpack()
+
+        return cmndOutcome.set(opResults=result,)
+
+
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
+
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0&1",
+            argName="backgroundColor",
+            argDefault='',
+            argChoices=[],
+            argDescription="One argument, any string for a factName"
+        )
+
+        return cmndArgsSpecDict
+
 
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :sep nil :title "Desktop Background" :anchor ""  :extraInfo "CSs"
