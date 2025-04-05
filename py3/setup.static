@@ -53,7 +53,7 @@ def pkgVersion():
 
 requires = [
 "blee",
-"blee.csPlayer",
+"bisos.csPlayer",
 "bisos",
 "bisos.b",
 "bisos.banna",

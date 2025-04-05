@@ -90,14 +90,14 @@ import collections
 (setq  b:py:cs:csuList
   (list
    "bisos.b.cs.ro"
-   "blee.csPlayer.bleep"
+   "bisos.csPlayer.bleep"
    "bisos.gnome.gnomeBisos"
    "bisos.b.clsMethod_csu"
    "bisos.debian.configFile"
  ))
 #+END_SRC
 #+RESULTS:
-| bisos.b.cs.ro | blee.csPlayer.bleep | bisos.gnome.gnomeBisos | bisos.b.clsMethod_csu | bisos.debian.configFile |
+| bisos.b.cs.ro | bisos.csPlayer.bleep | bisos.gnome.gnomeBisos | bisos.b.clsMethod_csu | bisos.debian.configFile |
 #+end_org """
 
 ####+BEGIN: b:py3:cs:framework/csuListProc :pyImports t :csuImports t :csuParams t :csmuParams nil
@@ -106,13 +106,13 @@ import collections
 #+end_org """
 
 from bisos.b.cs import ro
-from blee.csPlayer import bleep
+from bisos.csPlayer import bleep
 from bisos.gnome import gnomeBisos
 from bisos.b import clsMethod_csu
 from bisos.debian import configFile
 
 
-csuList = [ 'bisos.b.cs.ro', 'blee.csPlayer.bleep', 'bisos.gnome.gnomeBisos', 'bisos.b.clsMethod_csu', 'bisos.debian.configFile', ]
+csuList = [ 'bisos.b.cs.ro', 'bisos.csPlayer.bleep', 'bisos.gnome.gnomeBisos', 'bisos.b.clsMethod_csu', 'bisos.debian.configFile', ]
 
 g_importedCmndsModules = cs.csuList_importedModules(csuList)
 
@@ -167,7 +167,7 @@ class examples(cs.Cmnd):
         cs.examples.myName(cs.G.icmMyName(), cs.G.icmMyFullName())
         cs.examples.commonBrief()
 
-        bleep.examples_icmBasic()
+        bleep.examples_csBasic()
         gnomeBisos.examples_csu().pyCmnd()
 
         return(cmndOutcome)
